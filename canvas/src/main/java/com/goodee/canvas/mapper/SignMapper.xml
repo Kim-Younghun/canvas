@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodee.canvas.mapper.SignMapper">
+	<insert id="insertSign" parameterType="com.goodee.canvas.vo.Sign">
+		INSERT INTO sign(sign_member, sign_savename, sign_filetype, sign_filesize)
+		VALUES(#{signMember}, #{signSavename}, #{signFiletype}, #{signFilesize})
+	</insert>
+</mapper>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+</head>
+<body>
+	<h1>서명</h1>
+	<canvas id="goal" style="border: 1px solid black"></canvas>
+	<!-- 자바스크립트 (이미지 <- 문자열) -->
+	<!-- 자바API (이미지 -> 문자열) -->
+	<!-- cash 이미지 -(js)> ajax(비동기, id검색+차트(그래프)+서명전달+카테고리)로 넘긴다. 문자열(BASE64) -(server)> java -> java이미지  -->
+	<div>
+		<button id="save">Save</button>
+		<button id="clear">Clear</button>
+		<button id="send">Send</button>
+	</div>
+	<div>
+		<img id="target" src="" width=60 height=200>		
+	</div>
+</body>
+
+<script>
+	let goal = $('#goal')[0];
+	
+	let sign = new SignaturePad(goal, {minWidth:2, maxWidth:2, penColor:'rgb(0,0,0)'});
+	
+	$("#clear").on("click", function() {
+		sign.clear();
+	});
+	
+	$("#save").on("click", function() {
+		if(sign.isEmpty()) {
+			alert("내용이 없습니다.");
+		} else {
+			let data = sign.toDataURL("image/png");
+			// window.open(data, "test", "width=600, height=200, scrollbars=no");
+			$('#target').attr('src', data);
+		}
+	});
+	
+	$('#send').click(function() {
+		$.ajax({
+			url : '/addSign',
+			data : {sign : sign.toDataURL('image/png', 1.0)}, // 캔버스에 그려진 이미지를 Base64 인코딩된 문자열로 저장
+			type : 'post',
+		 	success : function(jsonData) {
+				alert('이미지 전송 성공' + jsonData);
+			}
+			
+		});
+	});
+</script>
+	
+</html>
